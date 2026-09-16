@@ -4,3 +4,11 @@ node_modules/
 *.log
 .DS_Store
 Thumbs.db
+output/
+runs/
+wandb/
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.jsonl

@@ -10,12 +10,12 @@ node scripts/build_qq_style_dataset.js [源文件] [输出目录]
 默认参数：
 
 - 源文件：`E:/TencentFile/QQrecv/dialogs.jsonl`（QQ 群聊记录，每行一条 `{ context, reply, group_qq }`）
-- 输出目录：`E:/TencentFile/QQrecv/qq_style_2025plus`
+- 输出目录：`E:/TencentFile/QQrecv/qq_style_2024plus`
 
 ## 过滤规则
 
-- 只保留 2025-01-01（Asia/Shanghai）之后的记录
-- 目标回复须为纯文本、不超过 200 字、不含链接和本地路径
+- 只保留 2024-01-01（Asia/Shanghai）之后的记录
+- 目标回复须包含文本、不超过 200 字、不含链接和本地路径
 - 上下文中的媒体消息折叠为 `[图片]`、`[语音]` 等标签
 
 ## 输出
@@ -32,3 +32,42 @@ node scripts/build_qq_style_dataset.js [源文件] [输出目录]
 ## 配置
 
 脚本内常量：`TARGET_QQ`（目标人物 QQ 号）、`CUTOFF`（时间截断）、`MAX_CHARS`（回复长度上限）、`SYSTEM_PROMPT`（训练用的 system prompt）。
+
+## 训练
+
+训练脚本使用 `ms-swift`，默认读取清洗后的 Alpaca 格式数据：
+
+```bash
+bash scripts/train_lora.sh configs/style_lora_2024plus.env
+```
+
+如果开发机沿用 `go.sh` 工作流，也可以直接运行：
+
+```bash
+bash go.sh
+```
+
+默认训练配置：
+
+- 模型：`Qwen/Qwen3-4B-Instruct`
+- 数据目录：`$HOME/storage/SunJan10/qq_style_2024plus`
+- 训练集：`style_train_alpaca.jsonl`
+- 验证集：`style_val_alpaca.jsonl`
+- LoRA：`rank=8`、`alpha=16`、目标模块 `q_proj,k_proj,v_proj,o_proj`
+- 训练：`epoch=3`、`lr=2e-4`、`max_length=1024`
+
+训练前需要先把 `E:/TencentFile/QQrecv/qq_style_2024plus` 中的数据搬到开发机的 `DATA_DIR`。如需改路径、epoch 或 batch size，编辑 `configs/style_lora_2024plus.env`。
+
+## 导出
+
+训练完成后可合并 LoRA：
+
+```bash
+bash scripts/export_lora.sh configs/style_lora_2024plus.env
+```
+
+也可以显式指定 checkpoint：
+
+```bash
+bash scripts/export_lora.sh configs/style_lora_2024plus.env output/style_lora_2024plus/checkpoint-100
+```

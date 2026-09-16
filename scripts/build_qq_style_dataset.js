@@ -2,8 +2,8 @@ const fs = require("fs");
 const path = require("path");
 
 const SOURCE = process.argv[2] || "E:/TencentFile/QQrecv/dialogs.jsonl";
-const OUTPUT = process.argv[3] || "E:/TencentFile/QQrecv/qq_style_2025plus";
-const CUTOFF = 1735660800; // 2025-01-01 00:00:00 Asia/Shanghai
+const OUTPUT = process.argv[3] || "E:/TencentFile/QQrecv/qq_style_2024plus";
+const CUTOFF = 1704038400; // 2024-01-01 00:00:00 Asia/Shanghai
 const MAX_CHARS = 200;
 const TARGET_QQ = "3328717966";
 
@@ -151,7 +151,7 @@ function makeProfile(examples, rawStats) {
   }
 
   return {
-    cutoff: "2025-01-01T00:00:00+08:00",
+    cutoff: "2024-01-01T00:00:00+08:00",
     target_qq: TARGET_QQ,
     source: path.basename(SOURCE),
     sample_count: examples.length,
