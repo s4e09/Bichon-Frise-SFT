@@ -167,7 +167,7 @@ def main() -> None:
         config["model_id"],
         cache_dir=str(cache_dir / "models"),
         trust_remote_code=True,
-        torch_dtype=dtype,
+        dtype=dtype,
         low_cpu_mem_usage=True,
         attn_implementation="sdpa",
     )
@@ -210,7 +210,6 @@ def main() -> None:
     use_fp16 = dtype == torch.float16
     training_args = TrainingArguments(
         output_dir=str(output_dir),
-        overwrite_output_dir=True,
         num_train_epochs=float(config["num_train_epochs"]),
         learning_rate=float(config["learning_rate"]),
         per_device_train_batch_size=int(config["per_device_train_batch_size"]),
@@ -229,6 +228,8 @@ def main() -> None:
         remove_unused_columns=False,
         dataloader_num_workers=0,
         gradient_checkpointing=bool(config.get("gradient_checkpointing", True)),
+        do_train=True,
+        do_eval=True,
     )
 
     trainer = Trainer(
