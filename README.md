@@ -49,7 +49,7 @@ bash go.sh
 
 默认训练配置：
 
-- 模型：`Qwen/Qwen3-4B-Instruct`
+- 模型：`Qwen/Qwen3-4B-Instruct-2507`
 - 数据目录：`$HOME/storage/SunJan10/qq_style_2024plus`
 - 训练集：`style_train_alpaca.jsonl`
 - 验证集：`style_val_alpaca.jsonl`
@@ -57,6 +57,29 @@ bash go.sh
 - 训练：`epoch=3`、`lr=2e-4`、`max_length=1024`
 
 训练前需要先把 `E:/TencentFile/QQrecv/qq_style_2024plus` 中的数据搬到开发机的 `DATA_DIR`。如需改路径、epoch 或 batch size，编辑 `configs/style_lora_2024plus.env`。
+
+### 本机 Windows 训练
+
+本机训练使用 `transformers + peft`，默认读取本机清洗产物：
+
+```powershell
+.\scripts\train_local.ps1 -DryRun
+.\scripts\train_local.ps1
+```
+
+默认配置在 `configs/local_peft_2024plus.json`：
+
+- 数据目录：`E:/TencentFile/QQrecv/qq_style_2024plus`
+- 输出目录：`D:/bixiong_lora/output/style_lora_2024plus`
+- 缓存目录：`D:/bixiong_lora/cache`
+- LoRA：`rank=8`、`alpha=16`
+- 显存友好设置：`batch_size=1`、`gradient_accumulation_steps=16`、`max_length=768`、开启 gradient checkpointing
+
+本机建议使用独立 Conda 环境，避免污染已有环境：
+
+```powershell
+.\scripts\setup_local_env.ps1
+```
 
 ## 导出
 

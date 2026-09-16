@@ -1,4 +1,5 @@
 node_modules/
+__pycache__/
 .env
 .env.local
 *.log
@@ -7,6 +8,8 @@ Thumbs.db
 output/
 runs/
 wandb/
+checkpoint-*/
+final_adapter/
 *.pt
 *.pth
 *.bin
